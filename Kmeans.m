@@ -1,28 +1,19 @@
-function  segmentedImages = Kmeans(GMMImages)
+function  [img_g] = Kmeans()
 
-%Reserve memory space for segmented images 
-segmentedImages = cell(numel(GMMImages));
+[ime_dat, put] = uigetfile('*.png' );          %odabir slike..odaberi izoštrenu sliku
+img = (imread([put '\' ime_dat]));
+%%
 
-%Define folder destination for segmented images
-foldername = 'C:\Users\Dino\Desktop\SPUS-Projekt\Segmented Images';
+L = imsegkmeans(img, 2);         %kmeans segmentacija
+B = labeloverlay(img, L);
+B = im2gray(B);
+t = graythresh(B);
+BW = imbinarize(B,t);
 
+figure('Name','kMeans segmentacija','NumberTitle','off');
+subplot(1,2,1),imshow(img), title('originalna slika');
+subplot(1,2,2), imshow(BW), title('segmentirana slika');
 
-for i = 1:numel(GMMImages)
-    
-    %Image segmentation usign k-means clustering method 
-    L = imsegkmeans(GMMImages{i}, 2);
-    segmentedImages{i} = rgb2gray(labeloverlay(GMMImages{i}, L));
-    gray_treshold = graythresh(segmentedImages{i});
-    segmentedImages{i} = imbinarize(segmentedImages{i}, gray_treshold);
-    
-    %Write segmented images to disk
-    filename = fullfile(foldername, sprintf('SEG_%d.png', i));
-    imwrite(segmentedImages{i}, filename);
-    
-
-end 
-
-
-segmentedImages = transpose(segmentedImages(:, 1));
+imwrite(BW, 'segmentirana_slika_Kmeans.jpg');
 
 end

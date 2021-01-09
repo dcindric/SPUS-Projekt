@@ -1,67 +1,37 @@
-function GMMImage = GMM(processedImage)
+function [] = GMM()
 
-%K value for GMM 
-K = 3;                         
+[ime_dat, put] = uigetfile('*.png' );          %odabir slike..odaberi izoštrenu sliku
+img = double(imread([put '\' ime_dat]));
 
-%Reserve memory space for reshaped data matrix and Gaussian model
-imageData = cell(numel(processedImage));
-imageData = transpose(imageData(:, 1));
-
-gaussMixture = cell(numel(processedImage));
-gaussMixture = transpose(gaussMixture(:, 1));
+K = 3;                          % K za GMM
+[n,m,d] = size(img);
+podaci = reshape(img, n*m,d);   % 2D matrica
 
 
-for i = 1:numel(processedImage)
-    
-    [n,m,d] = size(processedImage{i});
-    imageData{i} = reshape(double(processedImage{i}), n*m, d);
-    gaussMixture{i} = fitgmdist(imageData{i}, K,'Options',statset('MaxIter',500),'SharedCov', true);
-    
-end
+g_model = fitgmdist(podaci, K,'Options',statset('MaxIter',500),'SharedCov', true);
 
+%% Zamijena svakog piksela s vrijednošću u središtu klastera
 
-%Reserve memory space for posterior probabilites and other temporarily used
-%variables
-probs = cell(numel(processedImage));
-max_g = cell(numel(processedImage));
+probb = posterior(g_model,podaci) ;
+[~,max_g] = max(probb,[],2);
 
+max_g = reshape(max_g, n,m);
+img_p_2 = img;
 
-%% Change every pixel with value in the center of the cluster
-for i = 1:numel(processedImage)
-    
-    probs{i} = posterior(gaussMixture{i}, imageData{i});
-    [~, max_g{i}] = max(probs{i}, [], 2);
-    max_g{i} = reshape(max_g{i}, n, m);
-    
-
-end
-
-
-%Reserve memory space for segmented images 
-GMMImage = processedImage;
-
-%Define folder destination for GMM images
-foldername = 'C:\Users\Dino\Desktop\SPUS-Projekt\GMM Images';
-
-for n = 1:numel(processedImage)
-    
-    for i = 1:n
-        
-        for j =1:m
-            
-           GMMImage{i}(i,j,:) = gaussMixture{i}.mu(max_g{i}(i,j),:);
-           
-        end
-        
-        %Write GMM images to disk 
-        filename = fullfile(foldername, sprintf('GMM_%d.png', i));
-        imwrite(GMMImage{i}, filename);
-        
+for i = 1:n
+    for j =1:m
+       img_p_2(i,j,:) = g_model.mu(max_g(i,j),:);
     end
-    
-
-    
 end
 
+imwrite(uint8(img_p_2), 'segmentirana_slika_GMM.jpg');
+
+figure('Name','GMM segmentacija','NumberTitle','off');
+subplot(2, 2, 1); 
+imshow(uint8(img));
+title('Početna slika') 
+subplot(2, 2, 2); 
+imshow(uint8(img_p_2)); 
+title([' K = ' num2str(K)])
 
 end
