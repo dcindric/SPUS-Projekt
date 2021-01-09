@@ -1,5 +1,5 @@
 %String represents location of source images to be processed
-imageFolder = 'C:\Users\Dino\Desktop\SPUS-Projekt';
+imageFolder = 'C:\Users';
 
 %Image loading and resizing 
 imagePrepared = prepareImages(imageFolder);
@@ -9,9 +9,7 @@ imagePrepared = prepareImages(imageFolder);
 imageEnhanced = enhanceImage(imagePrepared);
 
 
-%Saving images to disk in same location as original images
-saveImages(imageEnhanced);
-
-
-
+GMMImages = GMM(imageEnhanced);
+segmentedImages = Kmeans(GMMImages);
+[numOfOlives, markedImages] = countObjects(segmentedImages);
 
