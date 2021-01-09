@@ -4,7 +4,7 @@ function [numOfOlives, markedImages] = countObjects(segmentedImages)
     markedImages = segmentedImages;
     
     %Define folder destination for marked images 
-    foldername = 'C:\Users\Dino\Desktop\SPUS-Projekt\Final Output';
+    foldername = 'C:\Users\Dino\Documents\SPUS-Projekt\Final Output';
     
     %Number of olive trees counted, index in vector array corresponds to
     %number of olive trees counted on indexed image, for example:
