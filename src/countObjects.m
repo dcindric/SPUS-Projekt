@@ -1,10 +1,10 @@
-function [numOfOlives, markedImages] = countObjects(segmentedImages)
+function [numOfOlives, markedImages] = countObjects(segmentedImages, method)
    
     %Reserve memory space for marked images 
     markedImages = segmentedImages;
     
     %Define folder destination for marked images 
-    foldername = 'C:\Users\Dino\Documents\SPUS-Projekt\Final Output';
+    foldername = 'C:\Users\Dino\Desktop\SPUS-Projekt\Final Output';
     
     %Number of olive trees counted, index in vector array corresponds to
     %number of olive trees counted on indexed image, for example:
@@ -30,7 +30,13 @@ function [numOfOlives, markedImages] = countObjects(segmentedImages)
         
         title(['No. of trees:  ' num2str(numOfOlives(i))]);
         
-        filename = fullfile(foldername, sprintf('FINAL_%d.png', i));
+        if (strcmp(method, "GMM"))
+            filename = fullfile(foldername, sprintf('FINAL_GMM_%d.png', i));
+        elseif (strcmp(method, "kmeans"))
+            filename = fullfile(foldername, sprintf('FINAL_KMEANS_%d.png', i));
+        else
+            
+        end
         
         print(filename, '-dpng')
         %imwrite(markedImages{i}, filename);
