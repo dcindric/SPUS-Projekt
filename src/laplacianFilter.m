@@ -2,7 +2,7 @@ function laplaceImage = laplacianFilter(imageGray)
 %Laplacian filter applied to images
 
 %Define folder destination for processed images 
-foldername = 'C:\Users\Dino\Documents\SPUS-Projekt\Processed Images';
+foldername = 'C:\Users\Dino\Desktop\SPUS-Projekt\Processed Images';
     
     %Reserve memory space for filtered images
     laplaceImage = cell(numel(imageGray));

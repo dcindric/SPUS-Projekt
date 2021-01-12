@@ -41,7 +41,7 @@ end
 GMMImage = processedImage;
 
 %Define folder destination for GMM images
-foldername = 'C:\Users\Dino\Documents\SPUS-Projekt\GMM Images';
+foldername = 'C:\Users\Dino\Desktop\SPUS-Projekt\GMM Images';
 
 for n = 1:numel(processedImage)
     

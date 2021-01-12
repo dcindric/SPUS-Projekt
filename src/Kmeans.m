@@ -1,22 +1,22 @@
-function  segmentedImages = Kmeans(GMMImages)
+function  segmentedImages = Kmeans(imageEnhanced)
 
 %Reserve memory space for segmented images 
-segmentedImages = cell(numel(GMMImages));
+segmentedImages = cell(numel(imageEnhanced));
 
 %Define folder destination for segmented images
-foldername = 'C:\Users\Dino\Documents\SPUS-Projekt\Segmented Images';
+foldername = 'C:\Users\Dino\Desktop\SPUS-Projekt\KMEANS Images';
 
 
-for i = 1:numel(GMMImages)
+for i = 1:numel(imageEnhanced)
     
     %Image segmentation usign k-means clustering method 
-    L = imsegkmeans(GMMImages{i}, 2);
-    segmentedImages{i} = rgb2gray(labeloverlay(GMMImages{i}, L));
+    L = imsegkmeans(imageEnhanced{i}, 2);
+    segmentedImages{i} = rgb2gray(labeloverlay(imageEnhanced{i}, L));
     gray_treshold = graythresh(segmentedImages{i});
     segmentedImages{i} = imbinarize(segmentedImages{i}, gray_treshold);
     
     %Write segmented images to disk
-    filename = fullfile(foldername, sprintf('SEG_%d.png', i));
+    filename = fullfile(foldername, sprintf('KMEANS_%d.png', i));
     imwrite(segmentedImages{i}, filename);
     
 

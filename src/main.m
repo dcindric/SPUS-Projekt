@@ -10,6 +10,13 @@ imageEnhanced = enhanceImage(imagePrepared);
 
 
 GMMImages = GMM(imageEnhanced);
-segmentedImages = Kmeans(GMMImages);
-[numOfOlives, markedImages] = countObjects(segmentedImages);
+[numOfOlivesGMM, gmmCounted] = countObjects(GMMImages, 'GMM');
+
+
+
+kMeansImages = Kmeans(imageEnhanced);
+[numOfOlivesKmeans, kmeansCounted] = countObjects(kMeansImages, 'kmeans');
+
+
+
 
